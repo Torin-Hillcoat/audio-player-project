@@ -49,6 +49,10 @@ public class Queue {
             this.clip = AudioSystem.getClip();
             this.clip.open(audioInputStream);
             this.clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else if (this.status == "paused") {
+            this.clip.close();
+            resetStream();
+            this.clip.setMicrosecondPosition(this.currentFrame);
         }
 
         // play audio clip
@@ -78,5 +82,11 @@ public class Queue {
 
     public void shuffle() {
         assert true;
+    }
+
+    public void resetStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+        this.audioInputStream = AudioSystem.getAudioInputStream(currentAudio.getFile());
+        this.clip.open(this.audioInputStream);
+        this.clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 }
