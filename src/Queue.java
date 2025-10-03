@@ -1,11 +1,21 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.FileNotFoundException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Queue {
     private AudioFile currentAudio;
     private List<AudioFile> queue;
+    private Long currentFrame;
+    private Clip clip;
+    private String status;
+    private AudioInputStream audioInputStream;
 
     // constructor
     // searches through audio directory and converts all files to AudioFile, then stores them in queue
@@ -13,6 +23,7 @@ public class Queue {
         this.queue = new ArrayList<AudioFile>();
         File dir = new File("audio");
         File[] directoryListing = dir.listFiles();
+        // check that the audio directory exists
         if (directoryListing != null) {
             for (File child : directoryListing) {
                 // create AudioFile and add to queue
@@ -24,8 +35,19 @@ public class Queue {
         }
     }
 
-    public void play() {
-        assert true;
+    public void play() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        // use first audio in queue if no current audio
+        if (currentAudio == null) {
+            this.currentAudio = this.queue.getFirst();
+        }
+
+        // create audio clip and play
+        this.audioInputStream = AudioSystem.getAudioInputStream(currentAudio.getFile());
+        this.clip = AudioSystem.getClip();
+        this.clip.open(audioInputStream);
+        this.clip.loop(Clip.LOOP_CONTINUOUSLY);
+        this.clip.start();
+        this.status = "playing";
     }
 
     public void  pause() {
