@@ -21,6 +21,8 @@ public class Queue {
     // searches through audio directory and converts all files to AudioFile, then stores them in queue
     public Queue() throws FileNotFoundException {
         this.queue = new ArrayList<AudioFile>();
+        this.status = "paused";
+
         File dir = new File("audio");
         File[] directoryListing = dir.listFiles();
         // check that the audio directory exists
@@ -50,8 +52,14 @@ public class Queue {
         this.status = "playing";
     }
 
-    public void  pause() {
-        assert true;
+    public void pause() {
+        if (this.status == "paused") {
+            System.out.println("Audio already paused");
+        } else {
+            this.currentFrame = this.clip.getMicrosecondPosition();
+            this.clip.stop();
+            this.status = "paused";
+        }
     }
 
     public void skipForward() {
