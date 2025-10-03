@@ -80,18 +80,24 @@ public class Queue {
         assert true;
     }
 
+    public void restartCurrent() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        stop();
+        play();
+    }
+
     public void shuffle() {
         assert true;
     }
 
-    // audio stopper, to be used when exiting
+    // audio stopper
     public void stop() {
         this.currentFrame = 0L;
         this.clip.stop();
         this.clip.close();
+        this.status = "invalid";
     }
 
-    public void resetStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+    public void resetStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.audioInputStream = AudioSystem.getAudioInputStream(currentAudio.getFile());
         this.clip.open(this.audioInputStream);
         this.clip.loop(Clip.LOOP_CONTINUOUSLY);
