@@ -84,6 +84,13 @@ public class Queue {
         assert true;
     }
 
+    // audio stopper, to be used when exiting
+    public void stop() {
+        this.currentFrame = 0L;
+        this.clip.stop();
+        this.clip.close();
+    }
+
     public void resetStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
         this.audioInputStream = AudioSystem.getAudioInputStream(currentAudio.getFile());
         this.clip.open(this.audioInputStream);
